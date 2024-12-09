@@ -35,6 +35,11 @@ class InvoiceController extends Controller
     public function show($id, Request $request)
     {
         $service = Service::findOrFail($id); // Ambil data service
+        // Periksa apakah status service adalah 'approved'
+        if ($service->status !== 'approved') {
+        // Jika tidak approved, arahkan ke halaman 404
+        abort(404);
+    }
         $banks = BankAccount::all(); // Ambil semua bank
         $discount = null; // Diskon default null
         // Tangkap parameter `aff` dari URL
