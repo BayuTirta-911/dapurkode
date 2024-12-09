@@ -26,11 +26,22 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('pendingServicesCount', 'paidInvoicesCount', 'pendingAffiliateRequestsCount'));
     }
 
-    public function profileManager()
-    {   
-        $users = User::all(); // Mengambil semua data pengguna
-        return view('admin.profile_manager', compact('users'));
+    public function profileManager(Request $request)
+    {
+        // Ambil kata kunci dari input pencarian
+        $search = $request->input('search');
+
+        // Query untuk mengambil semua pengguna dengan filter pencarian
+        $users = User::when($search, function ($query, $search) {
+                return $query->where('name', 'like', '%' . $search . '%')
+                            ->orWhere('email', 'like', '%' . $search . '%');
+            })
+            ->paginate(10); // Menampilkan 10 pengguna per halaman
+
+        // Return ke view dengan data pengguna dan kata kunci pencarian
+        return view('admin.profile_manager', compact('users', 'search'));
     }
+
 
     public function deleteProfile(User $user)
     {
@@ -58,11 +69,25 @@ class AdminController extends Controller
         return redirect()->route('admin.profile_manager')->with('success', 'User status updated successfully.');
     }
 
-    public function manageServices()
+    public function manageServices(Request $request)
     {
-        $services = Service::with('user')->get(); // Ambil semua service dengan data user terkait
-        return view('admin.services.index', compact('services'));
+        // Ambil kata kunci dari input pencarian
+        $search = $request->input('search');
+
+        // Query untuk mendapatkan daftar service dengan filter pencarian dan paginasi
+        $services = Service::with('user')
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', '%' . $search . '%')
+                            ->orWhereHas('user', function ($q) use ($search) {
+                                $q->where('name', 'like', '%' . $search . '%')
+                                ->orWhere('email', 'like', '%' . $search . '%');
+                            });
+            })
+            ->paginate(10); // Menampilkan 10 service per halaman
+
+        return view('admin.services.index', compact('services', 'search'));
     }
+
 
     // Menampilkan form untuk mengubah status service
     public function editServiceStatus(Service $service)
@@ -140,12 +165,21 @@ class AdminController extends Controller
     }
 
     // Menampilkan daftar diskon
-    public function indexDiscounts()
+    public function indexDiscounts(Request $request)
     {
-        $discounts = Discount::all();
+        // Ambil kata kunci dari input pencarian
+        $search = $request->input('search');
 
-        return view('admin.discounts.index', compact('discounts'));
+        // Query untuk mengambil data diskon dengan filter pencarian dan paginasi
+        $discounts = Discount::when($search, function ($query, $search) {
+                return $query->where('code', 'like', '%' . $search . '%')
+                            ->orWhere('amount', 'like', '%' . $search . '%');
+            })
+            ->paginate(10); // Menampilkan 10 diskon per halaman
+
+        return view('admin.discounts.index', compact('discounts', 'search'));
     }
+
 
     public function destroyDiscount($id)
     {

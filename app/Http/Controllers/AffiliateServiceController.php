@@ -35,11 +35,21 @@ class AffiliateServiceController extends Controller
         return view('affiliate.service.show', compact('service', 'affiliateLink'));
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil semua service yang statusnya approved
-        $services = Service::where('status', 'approved')->get();
+        // Ambil kata kunci dari input pencarian
+        $search = $request->input('search');
 
-        return view('affiliate.service.index', compact('services'));
+        // Query untuk mengambil semua service dengan status approved
+        // Jika ada kata kunci, filter berdasarkan nama service
+        $services = Service::where('status', 'approved')
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', '%' . $search . '%');
+            })
+            ->paginate(6); // Tampilkan 9 item per halaman
+
+        // Return ke view dengan data services dan kata kunci pencarian
+        return view('affiliate.service.index', compact('services', 'search'));
     }
+
 }

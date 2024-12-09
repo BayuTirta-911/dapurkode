@@ -1,38 +1,48 @@
 @extends('layouts.app')
-@section('title', 'Profile Manager')
+@section('title', 'Manage Purchases')
 @section('content')
 <style>
     .badge.bg-success {
-    background-color: #28a745;
-    color: white;
-}
+        background-color: #28a745;
+        color: white;
+    }
 
-.badge.bg-warning {
-    background-color: #ffc107;
-    color: black;
-}
+    .badge.bg-warning {
+        background-color: #ffc107;
+        color: black;
+    }
 
-.badge.bg-danger {
-    background-color: #dc3545;
-    color: white;
-}
+    .badge.bg-danger {
+        background-color: #dc3545;
+        color: white;
+    }
 
-.badge.bg-primary {
-    background-color: #007bff;
-    color: white;
-}
-
+    .badge.bg-primary {
+        background-color: #007bff;
+        color: white;
+    }
 </style>
 <div class="container mt-4">
     <h2>Manage Purchases</h2>
 
-   
-    
+    <!-- Search Bar -->
+    <form action="{{ route('admin.purchases.index') }}" method="GET" class="mb-3">
+        <div class="input-group">
+            <input 
+                type="text" 
+                name="search" 
+                class="form-control" 
+                placeholder="Search by Invoice ID, Service, or Affiliate Code..." 
+                value="{{ old('search', $search) }}"
+            >
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
 
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>#</th>
                 <th>Invoice ID</th>
                 <th>Service</th>
                 <th>Total Price</th>
@@ -42,9 +52,9 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($purchases as $purchase)
+            @forelse ($purchases as $index => $purchase)
                 <tr>
-                    <td>{{ $purchase->id }}</td>
+                    <td>{{ $loop->iteration + ($purchases->currentPage() - 1) * $purchases->perPage() }}</td>
                     <td style="text-transform:uppercase;">{{ $purchase->invoice_id }}</td>
                     <td>{{ $purchase->service_name }}</td>
                     <td>Rp {{ number_format($purchase->total_price, 2) }}</td>
@@ -68,8 +78,17 @@
                         </form>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="7" class="text-center">No purchases found.</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center">
+        {{ $purchases->links() }}
+    </div>
 </div>
 @endsection

@@ -14,13 +14,23 @@ use Illuminate\Support\Facades\Auth;
 
 class InvoiceController extends Controller
 {   
-    public function index()
+    public function index(Request $request)
     {
-        // Mengambil data invoice berdasarkan id_buyer yang sesuai dengan user login
-        $invoices = Invoice::where('id_buyer', Auth::id())->get();
+        // Ambil kata kunci pencarian (jika ada)
+        $search = $request->input('search');
 
-        return view('invoice.index', compact('invoices'));
+        // Filter data berdasarkan id_buyer dan keyword pencarian
+        $invoices = Invoice::where('id_buyer', Auth::id())
+            ->when($search, function ($query, $search) {
+                $query->where('service_name', 'like', '%' . $search . '%')
+                    ->orWhere('invoice_id', 'like', '%' . $search . '%');
+            })
+            ->orderBy('created_at', 'desc') // Urutkan berdasarkan tanggal terbaru
+            ->paginate(10); // Pagination dengan 10 item per halaman
+
+        return view('invoice.index', compact('invoices', 'search'));
     }
+
     // Menampilkan halaman invoice
     public function show($id, Request $request)
     {

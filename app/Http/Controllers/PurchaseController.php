@@ -13,13 +13,23 @@ use Illuminate\Support\Facades\Storage;
 class PurchaseController extends Controller
 {
     // Menampilkan semua invoice
-    public function index()
+    public function index(Request $request)
     {
-        $purchases = Invoice::orderByRaw("FIELD(status, 'Paid') DESC")
-        ->orderBy('created_at', 'desc')
-        ->get();
-        return view('admin.purchases.index', compact('purchases'));
+        $search = $request->input('search');
+    
+        // Filter pencarian dan urutkan berdasarkan status
+        $purchases = Invoice::when($search, function ($query, $search) {
+                return $query->where('invoice_id', 'like', '%' . $search . '%')
+                             ->orWhere('service_name', 'like', '%' . $search . '%')
+                             ->orWhere('affiliate_code', 'like', '%' . $search . '%');
+            })
+            ->orderByRaw("FIELD(status, 'paid') DESC")
+            ->orderBy('created_at', 'desc')
+            ->paginate(10); // Pagination dengan 10 item per halaman
+    
+        return view('admin.purchases.index', compact('purchases', 'search'));
     }
+    
 
     // Menampilkan detail invoice
     public function show($id)

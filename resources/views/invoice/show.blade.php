@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+
+
+</style>
 <div class="container mt-5">
     <div class="card">
         <div class="card-body">
@@ -59,6 +62,7 @@
                     @csrf
                     <h5>Informasi Pemesanan</h5>
                     <input type="hidden" name="affiliate_code" value="{{ old('affiliate_code', $affiliateCode) }}">
+                    <input type="hidden" name="summary" value="{{ number_format(session('total_price', $service->price_1 + $service->installer_fee + $service->other_fee)) }}">
                     <div class="mb-3">
                         <label>Alamat</label>
                         <textarea name="address" class="form-control" required></textarea>

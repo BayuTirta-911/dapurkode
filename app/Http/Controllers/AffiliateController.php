@@ -20,8 +20,10 @@ class AffiliateController extends Controller
             return redirect()->route('dashboard')->with('error', 'You do not have an affiliate code.');
         }
 
-        // Ambil daftar pembelian berdasarkan kode affiliate
-        $purchases = Invoice::where('affiliate_code', $affiliateCode)->with(['buyer'])->get();
+        // Ambil daftar pembelian berdasarkan kode affiliate, gunakan paginate
+        $purchases = Invoice::where('affiliate_code', $affiliateCode)
+            ->with(['buyer'])
+            ->paginate(10); // Menampilkan 10 item per halaman
 
         return view('affiliate.purchases.index', compact('purchases'));
     }

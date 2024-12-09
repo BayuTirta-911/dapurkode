@@ -33,5 +33,8 @@
             @endforelse
         </tbody>
     </table>
+    <div class="d-flex justify-content-center">
+        {{ $purchases->links() }}
+    </div>
 </div>
 @endsection

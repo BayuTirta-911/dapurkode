@@ -8,9 +8,21 @@
         <div class="card-body">
             <h4 class="card-title">Manage Vendor Services</h4>
 
-            
+            <!-- Search Bar -->
+            <form action="{{ route('admin.services.index') }}" method="GET" class="mb-3">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        class="form-control" 
+                        placeholder="Search by service name, vendor name, or email..." 
+                        value="{{ old('search', $search) }}" 
+                    >
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
 
-            <!-- Tabel untuk daftar service -->
+            <!-- Table for Service List -->
             <div class="table-responsive">
                 <table class="table table-bordered table-hover align-middle">
                     <thead class="thead-light">
@@ -24,14 +36,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($services as $index => $service)
+                        @forelse ($services as $index => $service)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $loop->iteration + ($services->currentPage() - 1) * $services->perPage() }}</td>
                                 <td>{{ $service->name }}</td>
                                 <td>{{ $service->user->name }} ({{ $service->user->email }})</td>
-                                <td>Installer fee : Rp.{{ $service->installer_fee }} <br>
-                                    Affiliator fee : Rp.{{ $service->affiliator_fee }} <br>
-                                    Other fee : Rp.{{ $service->other_fee }}
+                                <td>
+                                    Installer fee: Rp {{ number_format($service->installer_fee, 2) }} <br>
+                                    Affiliator fee: Rp {{ number_format($service->affiliator_fee, 2) }} <br>
+                                    Other fee: Rp {{ number_format($service->other_fee, 2) }}
                                 </td>
                                 <td>
                                     @if ($service->status === 'pending')
@@ -42,9 +55,8 @@
                                         <span class="badge bg-danger">Rejected</span>
                                     @endif
                                 </td>
-                                
                                 <td class="text-center">
-                                <a href="{{ route('admin.services.edit_fees', $service->id) }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ route('admin.services.edit_fees', $service->id) }}" class="btn btn-primary btn-sm">
                                         <i class="ti ti-edit"></i> Change Additional Fees
                                     </a><br><br>
                                     <a href="{{ route('admin.services.edit', $service->id) }}" class="btn btn-primary btn-sm">
@@ -52,9 +64,18 @@
                                     </a>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center">No services found.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center">
+                {{ $services->links() }}
             </div>
         </div>
     </div>
