@@ -1,108 +1,110 @@
-# Project Name: DapurKode, a Laravel-Based Service Management Platform
+# Nama Proyek: DapurKode, Platform Manajemen Layanan Berbasis Laravel
 
-## Description
-This project is a Laravel-based service management platform designed to facilitate interactions between vendors, users, installers, and affiliates. The platform provides features such as service creation, invoicing, affiliate management, project requests, and balance tracking, offering a comprehensive solution for managing service-related workflows.
-
----
-
-## Features
-
-### **User Roles**
-- **Admin**: Manage users, services, invoices, and affiliate requests.
-- **Vendor**: Create, manage, and track services.
-- **Installer**: Submit and manage project requests.
-- **Affiliator**: Promote services and track affiliate earnings.
-
-### **Core Functionalities**
-- **Service Management**:
-  - Create and manage services.
-  - Group services by categories.
-  - Add custom fees for each service (installer fee, affiliator fee, etc.).
-
-- **Invoice Management**:
-  - Generate invoices for services.
-  - Apply discount codes and track affiliate commissions.
-
-- **Affiliate Management**:
-  - Track purchases made through affiliate links.
-  - Update affiliate balances and monitor commissions.
-
-- **Installer Management**:
-  - Submit project requests for services.
-  - Update project progress and track status.
-
-- **Admin Tools**:
-  - Approve/reject project requests.
-  - Update service fees and statuses.
-  - Manage user accounts and affiliate requests.
-
-### **Additional Features**
-- Pagination and search for data tables.
-- Secure login and registration with redirect functionality.
-- File upload with validation (e.g., image size restrictions).
-- User-friendly and modern UI.
+## Deskripsi
+Proyek ini adalah platform manajemen layanan berbasis Laravel yang dirancang untuk memfasilitasi interaksi antara vendor, pengguna, installer, dan affiliator. Platform ini menyediakan fitur seperti pembuatan layanan, faktur, manajemen afiliasi, permintaan proyek, dan pelacakan saldo, menawarkan solusi menyeluruh untuk mengelola alur kerja terkait layanan.
 
 ---
 
-## Installation Guide
+## Fitur
 
-### **Requirements**
+### **Peran Pengguna**
+- **Admin**: Mengelola pengguna, layanan, faktur, dan permintaan afiliasi.
+- **Vendor**: Membuat, mengelola, dan melacak layanan.
+- **Installer**: Mengajukan dan mengelola permintaan proyek.
+- **Affiliator**: Mempromosikan layanan dan melacak penghasilan afiliasi.
+
+### **Fungsi Utama**
+- **Manajemen Layanan**:
+  - Membuat dan mengelola layanan.
+  - Mengelompokkan layanan berdasarkan kategori.
+  - Menambahkan biaya tambahan untuk setiap layanan (biaya installer, biaya affiliator, dll).
+
+- **Manajemen Faktur**:
+  - Membuat faktur untuk layanan.
+  - Menggunakan kode diskon dan melacak komisi afiliasi.
+
+- **Manajemen Afiliasi**:
+  - Melacak pembelian melalui tautan afiliasi.
+  - Memperbarui saldo afiliasi dan memantau komisi.
+
+- **Manajemen Installer**:
+  - Mengajukan permintaan proyek untuk layanan.
+  - Memperbarui kemajuan proyek dan melacak status.
+
+- **Alat Admin**:
+  - Menyetujui/menolak permintaan proyek.
+  - Memperbarui biaya dan status layanan.
+  - Mengelola akun pengguna dan permintaan afiliasi.
+
+### **Fitur Tambahan**
+- Pagination dan pencarian untuk tabel data.
+- Login dan registrasi aman dengan fitur pengalihan halaman.
+- Upload file dengan validasi (misalnya, pembatasan ukuran gambar).
+- Antarmuka yang ramah pengguna dan modern.
+
+---
+
+## Panduan Instalasi
+
+### **Persyaratan**
 - PHP >= 8.0
 - Composer
 - Laravel Framework >= 10
-- MySQL or compatible database
-- Node.js and npm (for asset compilation)
+- MySQL atau database kompatibel
+- Node.js dan npm (untuk kompilasi aset)
 
-### **Steps**
+### **Langkah-Langkah**
 
-1. **Clone the Repository**
+1. **Clone Repository**
    ```bash
-   git clone https://github.com/BayuTirta-911/dapurkode
+   git clone https://github.com/BayuTirta-911/dapurkode.git
    cd dapurkode
    ```
 
-2. **Install Dependencies**
+2. **Install Dependensi**
    ```bash
    composer install
    npm install
    npm run build
    ```
 
-3. **Setup Environment**
-   - Copy the `.env.example` file to `.env`:
+3. **Atur Environment**
+   - Salin file `.env.example` menjadi `.env`:
      ```bash
      cp .env.example .env
      ```
-   - Update database credentials and other configurations in the `.env` file.
+   - Perbarui kredensial database dan konfigurasi lainnya di file `.env`.
 
 4. **Generate Application Key**
    ```bash
    php artisan key:generate
    ```
 
-5. **Run Migrations and Seeders**
+5. **Jalankan Migrasi dan Seeder**
    ```bash
    php artisan migrate --seed
    ```
 
-6. **Start the Development Server**
+6. **Jalankan Server Pengembangan**
    ```bash
    php artisan serve
    ```
 
-7. **Access the Application**
-   Open a browser and navigate to:
+7. **Akses Aplikasi**
+   Buka browser dan navigasikan ke:
    ```
    http://127.0.0.1:8000
    ```
 
-### **Optional Steps**
-- **Setup Storage Link**:
+### **Langkah Opsional**
+- **Buat Storage Link**:
   ```bash
   php artisan storage:link
   ```
-- **Clear Cache**:
+- **Bersihkan Cache**:
   ```bash
   php artisan config:clear
   php artisan cache:clear
   ```
+
+---
