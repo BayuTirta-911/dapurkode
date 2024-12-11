@@ -57,8 +57,8 @@ This project is a Laravel-based service management platform designed to facilita
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/your-username/your-repository-name.git
-   cd your-repository-name
+   git clone https://github.com/BayuTirta-911/dapurkode
+   cd dapurkode
    ```
 
 2. **Install Dependencies**
