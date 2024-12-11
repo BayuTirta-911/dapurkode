@@ -58,7 +58,7 @@
             </div>
 
             <!-- Button to Add New Bank Account -->
-            <a href="{{ route('bank_accounts.create', $account->id) }}" class="btn btn-primary mt-3">Add New Bank Account</a>
+            <a href="{{ route('bank_accounts.create') }}" class="btn btn-primary mt-3">Add New Bank Account</a>
         </div>
     </div>
 </div>
