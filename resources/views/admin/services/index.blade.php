@@ -42,9 +42,10 @@
                                 <td>{{ $service->name }}</td>
                                 <td>{{ $service->user->name }} ({{ $service->user->email }})</td>
                                 <td>
-                                    Installer fee: Rp {{ number_format($service->installer_fee, 2) }} <br>
-                                    Affiliator fee: Rp {{ number_format($service->affiliator_fee, 2) }} <br>
-                                    Other fee: Rp {{ number_format($service->other_fee, 2) }}
+                                    Service Price: Rp.{{ number_format($service->price_1, 2) }} <br>
+                                    Installer fee: Rp.{{ number_format($service->installer_fee, 2) }} <br>
+                                    Affiliator fee: Rp.{{ number_format($service->affiliator_fee, 2) }} <br>
+                                    Other fee: Rp.{{ number_format($service->other_fee, 2) }}
                                 </td>
                                 <td>
                                     @if ($service->status === 'pending')
