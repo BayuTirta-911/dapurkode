@@ -103,9 +103,11 @@ Route::middleware(['auth', 'role:installer'])->group(function () {
     Route::get('/installer/balance', [App\Http\Controllers\InstallerController::class, 'showBalance'])->name('installer.balance');
     Route::post('/installer/balance/update', [App\Http\Controllers\InstallerController::class, 'updateBalance'])->name('installer.balance.update');
 });
-    // Withdrawal    
+    // Withdrawal   
+
     Route::get('/withdraw', [App\Http\Controllers\WithdrawController::class, 'index'])->name('withdraw.index');
     Route::post('/withdraw/request', [App\Http\Controllers\WithdrawController::class, 'store'])->name('withdraw.request');
+
 });
 
 // Non User Payment Path
