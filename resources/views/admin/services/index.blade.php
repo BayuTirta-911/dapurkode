@@ -60,8 +60,11 @@
                                         <i class="ti ti-edit"></i> Change Additional Fees
                                     </a><br><br>
                                     <a href="{{ route('admin.services.edit', $service->id) }}" class="btn btn-primary btn-sm">
-                                        <i class="ti ti-edit"></i> Change Status
-                                    </a>
+                                        <i class="ti ti-edit"></i> Details, and change Status
+                                    </a><br><br>
+                                    <button class="btn btn-info btn-sm" onclick="copyInvoiceLink({{ $service->id }})">
+                                        <i class="ti ti-link"></i> Copy Invoice Link
+                                    </button>
                                 </td>
                             </tr>
                         @empty
@@ -80,4 +83,21 @@
         </div>
     </div>
 </div>
+<script>
+    function copyInvoiceLink(id) {
+        // Buat URL dengan ID yang sesuai
+        const invoiceLink = `${window.location.origin}/invoice/${id}`;
+
+        // Copy ke clipboard
+        navigator.clipboard.writeText(invoiceLink)
+            .then(() => {
+                alert('Invoice link copied to clipboard!');
+            })
+            .catch(err => {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy the link.');
+            });
+    }
+</script>
+
 @endsection

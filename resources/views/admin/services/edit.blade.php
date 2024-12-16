@@ -29,14 +29,14 @@
                     <label class="form-label">Price 1</label>
                     <input type="text" class="form-control" value="Rp.{{ number_format($service->price_1, 2) }}" readonly>
                 </div>
-                <div class="col-md-4">
+                <!-- <div class="col-md-4">
                     <label class="form-label">Price 2 (Optional)</label>
                     <input type="text" class="form-control" value="{{ $service->price_2 ? 'Rp.' . number_format($service->price_2, 2) : 'N/A' }}" readonly>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Price 3 (Optional)</label>
                     <input type="text" class="form-control" value="{{ $service->price_3 ? 'Rp.' . number_format($service->price_3, 2) : 'N/A' }}" readonly>
-                </div>
+                </div> -->
             </div>
 
             <div class="mb-3">
