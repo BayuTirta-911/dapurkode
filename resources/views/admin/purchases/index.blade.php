@@ -43,6 +43,7 @@
         <thead>
             <tr>
                 <th>#</th>
+                <th>Last Modified</th>
                 <th>Invoice ID</th>
                 <th>Service</th>
                 <th>Total Price</th>
@@ -55,6 +56,7 @@
             @forelse ($purchases as $index => $purchase)
                 <tr>
                     <td>{{ $loop->iteration + ($purchases->currentPage() - 1) * $purchases->perPage() }}</td>
+                    <td>{{ $purchase->updated_at}}</td>
                     <td style="text-transform:uppercase;">{{ $purchase->invoice_id }}</td>
                     <td>{{ $purchase->service_name }}</td>
                     <td>Rp {{ number_format($purchase->total_price, 2) }}</td>
