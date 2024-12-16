@@ -165,7 +165,7 @@
             </li>
             @endif
 
-            @if (auth()->check())
+            @if (auth()->check() && in_array(auth()->user()->role, ['affiliator', 'vendor', 'installer']))
             <!-- Link Invoices -->
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('withdraw.index') }}" aria-expanded="false">
