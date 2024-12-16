@@ -6,12 +6,7 @@
 <div class="container mt-5">
     <h1 class="text-primary mb-4 text-center">Services You Can Promote</h1>
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
+    
     <!-- Search Bar -->
     <form action="{{ route('affiliate.services.index') }}" method="GET" class="mb-4">
         <div class="input-group">

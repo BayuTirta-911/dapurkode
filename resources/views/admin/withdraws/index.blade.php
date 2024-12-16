@@ -9,11 +9,7 @@
             {{ session('error') }}
         </div>
     @endif
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+    
 
     <div class="table-responsive">
         <table class="table table-hover align-middle text-center">

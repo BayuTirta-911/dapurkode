@@ -4,9 +4,7 @@
 <div class="container mt-5">
     <h3>Affiliate Requests</h3>
 
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    
 
     <table class="table table-bordered">
         <thead>

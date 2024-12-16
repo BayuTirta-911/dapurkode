@@ -29,21 +29,21 @@
 
                 <!-- Input untuk Price 1 -->
                 <div class="mb-3">
-                    <label for="price_1" class="form-label">Price 1</label>
+                    <label for="price_1" class="form-label">Price</label>
                     <input type="number" name="price_1" id="price_1" class="form-control" value="{{ old('price_1', $service->price_1) }}" required>
                 </div>
 
                 <!-- Input untuk Price 2 (optional) -->
-                <div class="mb-3">
+                <!-- <div class="mb-3">
                     <label for="price_2" class="form-label">Price 2 (Optional)</label>
                     <input type="number" name="price_2" id="price_2" class="form-control" value="{{ old('price_2', $service->price_2) }}">
-                </div>
+                </div> -->
 
                 <!-- Input untuk Price 3 (optional) -->
-                <div class="mb-3">
+                <!-- <div class="mb-3">
                     <label for="price_3" class="form-label">Price 3 (Optional)</label>
                     <input type="number" name="price_3" id="price_3" class="form-control" value="{{ old('price_3', $service->price_3) }}">
-                </div>
+                </div> -->
 
                 <!-- Upload Image -->
                 <div class="mb-3">

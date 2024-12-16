@@ -6,11 +6,7 @@
 <div class="container mt-5">
     <h1 class="text-primary text-center mb-4">Submit Project Request</h1>
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+    
 
     @if(session('error'))
         <div class="alert alert-danger">

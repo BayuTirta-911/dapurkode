@@ -6,9 +6,7 @@
 <div class="container mt-5">
     <h1 class="text-primary mb-4">Project List</h1>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    
 
     <!-- Tabel Proyek WIP -->
     <h3 class="text-secondary">Projects In Progress</h3>

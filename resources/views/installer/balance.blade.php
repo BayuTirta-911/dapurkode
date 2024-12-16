@@ -7,9 +7,7 @@
     <h1 class="text-primary">Installer Balance</h1>
     <p>Your current balance and potential rewards are shown below:</p>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+   
 
     <!-- Saldo Saat Ini -->
     <div class="card mb-4">

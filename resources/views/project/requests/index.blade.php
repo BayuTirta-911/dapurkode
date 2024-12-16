@@ -6,11 +6,7 @@
 <div class="container mt-5">
     <h1 class="text-primary mb-4">Your Project Requests</h1>
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+    
 
     <!-- Tombol untuk Membuat Request -->
     <div class="mb-4">

@@ -6,9 +6,7 @@
 <div class="container mt-5">
     <h1 class="text-primary mb-4">Project List</h1>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    
 
     <div class="table-responsive">
         <table class="table align-middle table-hover">
