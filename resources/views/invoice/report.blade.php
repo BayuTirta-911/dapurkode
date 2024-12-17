@@ -42,13 +42,41 @@
             <div class="row mb-4">
                 <div class="col-12 col-md-6">
                     <h6>Service Name</h6>
-                    <p class="lead">{{ $purchase->service_name }}</p>
+                    <p class="lead">{{ $purchase->invoice_id }} - {{ $purchase->service_name }}</p>
                 </div>
                 <div class="col-12 col-md-6">
                     <h6>Total Price</h6>
                     <p class="lead text-success">Rp {{ number_format($purchase->total_price, 2) }}</p>
                 </div>
             </div>
+            @if ($purchase->og_disc > 0.0) <!-- Kondisi benar -->
+                <div class="row mb-4">
+                    <div class="col-12 col-md-6">
+                        <h6>Applied Discount Code</h6>
+                        <p class="lead">{{ $purchase->discount_code }}</p>
+                    </div>
+
+                    @if ($purchase->og_disc >= 100.0) <!-- Cek jika diskon 100% atau lebih -->
+                        <div class="col-12 col-md-6">
+                            <h6>You Saved</h6>
+                            <p class="lead text-success">
+                                Rp {{ number_format($purchase->og_disc, 2) }}
+                            </p>
+                        </div>
+                    @else <!-- Diskon dalam persentase -->
+                        @php
+                            // Hitung nilai diskon
+                            $discountAmount = ($purchase->og_disc / 100) * $purchase->og_price;
+                        @endphp
+                        <div class="col-12 col-md-6">
+                            <h6>You Saved {{ number_format($purchase->og_disc) }}%</h6>
+                            <p class="lead text-success">
+                                Rp {{ number_format($discountAmount, 2) }}
+                            </p>
+                        </div>
+                    @endif
+                </div>
+            @endif
 
             <!-- Bank Information Section -->
             <div class="card mb-4">
