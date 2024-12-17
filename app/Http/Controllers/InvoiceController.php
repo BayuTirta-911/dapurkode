@@ -35,6 +35,8 @@ class InvoiceController extends Controller
     public function show($id, Request $request)
     {
         $service = Service::findOrFail($id); // Ambil data service
+        $og_price = $service->price_1+$service->installer_fee+$service->affiliator_fee+$service->other_fee;
+        //session()->flash('total_price', $og_price);
         // Periksa apakah status service adalah 'approved'
         if ($service->status !== 'approved') {
         // Jika tidak approved, arahkan ke halaman 404
@@ -45,7 +47,7 @@ class InvoiceController extends Controller
         // Tangkap parameter `aff` dari URL
         $affiliateCode = $request->query('aff', ''); // Default kosong jika tidak ada
 
-        return view('invoice.show', compact('service', 'banks', 'discount','affiliateCode'));
+        return view('invoice.show', compact('service', 'banks', 'discount','affiliateCode','og_price'));
     }
 
     // Memproses pembelian
@@ -81,6 +83,8 @@ class InvoiceController extends Controller
             'phone' => $request->phone,
             'note' => $request->note,
             'bank_id' => $request->bank,
+            'og_price' => str_replace(',', '', $request->og_price),
+            'og_disc' => str_replace(',', '', $request->og_disc),
             'affiliate_code' => $request->affiliate_code, // Menyimpan kode affiliate
         ]);
         //var_dump($invoice); die;
@@ -128,21 +132,22 @@ class InvoiceController extends Controller
         
         // Cari diskon berdasarkan kode yang dimasukkan
         $discount = Discount::where('code', $discountCode)->first();
-        
+        $discounttrueAmount = $discount->amount;
         if ($discount) {
             // Hitung total harga setelah diskon
             if ($discount->amount <= 100){
                 $discountAmount = $service->price_1*$discount->amount/100;
-                $discountWarn = "Your DIscount is ".$discount->amount."%";
+                $discountWarn = "Your Discount is ".$discount->amount."%";
             }
             else{
                 $discountAmount = $discount->amount;
                 $discountWarn = "Your Discount is Rp.".$discount->amount;
             }
-            $totalPrice = $service->price_1 + $service->installer_fee + $service->other_fee - $discountAmount;
+            $totalPrice = $service->price_1+$service->installer_fee+$service->affiliator_fee+$service->other_fee - $discountAmount;
             $discountCodeUsed = $discount->id;
             // Simpan diskon dalam session untuk ditampilkan pada halaman
             session()->flash('discount_amount', $discountAmount);
+            session()->flash('discount_true_amount', $discounttrueAmount);
             session()->flash('total_price', $totalPrice);
             session()->flash('discountcodeused', $discountCodeUsed);
             session()->flash('discountwarn', $discountWarn);

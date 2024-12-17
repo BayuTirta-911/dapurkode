@@ -23,6 +23,8 @@ class Invoice extends Model
         'progress_percentage',
         'log',
         'proof',
+        'og_price',
+        'og_disc',
     ];
 
     public function bank()
