@@ -54,8 +54,8 @@ class InvoiceController extends Controller
     public function process(Request $request, $id)
     {
         $request->validate([
-            'address' => 'required',
-            'phone' => 'required',
+            'address' => 'nullable',
+            'phone' => 'nullable',
             'note' => 'nullable',
             'bank' => 'required',
         ]);
@@ -79,8 +79,8 @@ class InvoiceController extends Controller
             'service_name' => $service->name,
             'total_price' => str_replace(',', '', $request->summary),
             'discount_code' => $request->discountcodeused,
-            'address' => $request->address,
-            'phone' => $request->phone,
+            'address' => 'null',
+            'phone' => 'null',
             'note' => $request->note,
             'bank_id' => $request->bank,
             'og_price' => str_replace(',', '', $request->og_price),
@@ -119,6 +119,53 @@ class InvoiceController extends Controller
         return redirect()->route('user.invoices.index', $purchase->id)->with('success', 'Payment proof uploaded successfully.');
     }
 
+    // public function applyDiscount(Request $request, $id)
+    // {
+    //     // Validasi kode diskon
+    //     $request->validate([
+    //         'discount_code' => 'required|string',
+    //     ]);
+
+    //     $service = Service::findOrFail($id);  // Ambil service berdasarkan ID
+    //     $discountCode = $request->input('discount_code');
+    //     $affiliateCode = $request->query('aff'); // Tangkap query string 'aff'
+        
+    //     // Cari diskon berdasarkan kode yang dimasukkan
+    //     $discount = Discount::where('code', $discountCode)->first();
+    //     if ($discount == NULL) {
+    //         $link = route('invoice.show', ['id' => $service->id]).'?aff='.$affiliateCode;
+    //         return redirect($link)->withErrors(['discount_code' => 'Kode diskon tidak valid!']);
+    //     }
+    //     $discounttrueAmount = $discount->amount;
+    //     if ($discount) {
+    //         // Hitung total harga setelah diskon
+    //         if ($discount->amount <= 100){
+    //             $discountAmount = $service->price_1*$discount->amount/100;
+    //             $discountWarn = "Your Discount is ".$discount->amount."%";
+    //         }
+    //         else{
+    //             $discountAmount = $discount->amount;
+    //             $discountWarn = "Your Discount is Rp.".$discount->amount;
+    //         }
+    //         $totalPrice = $service->price_1+$service->installer_fee+$service->affiliator_fee+$service->other_fee - $discountAmount;
+    //         $discountCodeUsed = $discount->code;
+    //         // Simpan diskon dalam session untuk ditampilkan pada halaman
+    //         session()->flash('discount_amount', $discountAmount);
+    //         session()->flash('discount_true_amount', $discounttrueAmount);
+    //         session()->flash('total_price', $totalPrice);
+    //         session()->flash('discountcodeused', $discountCodeUsed);
+    //         session()->flash('discountwarn', $discountWarn);
+    //         //var_dump($affiliateCode); die;
+    //         // Kembalikan ke halaman invoice dengan diskon diterapkan
+    //         $link = route('invoice.show', ['id' => $service->id]).'?aff='.$affiliateCode;
+    //         //var_dump($link); die;
+    //         return redirect($link);
+    //     }
+
+    //     // Jika kode diskon tidak valid
+    //     $link = route('invoice.show', ['id' => $service->id]).'?aff='.$affiliateCode;
+    //     return redirect($link)->withErrors(['discount_code' => 'Kode diskon tidak valid!']);
+    // }
     public function applyDiscount(Request $request, $id)
     {
         // Validasi kode diskon
@@ -126,42 +173,55 @@ class InvoiceController extends Controller
             'discount_code' => 'required|string',
         ]);
 
-        $service = Service::findOrFail($id);  // Ambil service berdasarkan ID
+        $service = Service::findOrFail($id); // Ambil service berdasarkan ID
         $discountCode = $request->input('discount_code');
         $affiliateCode = $request->query('aff'); // Tangkap query string 'aff'
-        
+
         // Cari diskon berdasarkan kode yang dimasukkan
         $discount = Discount::where('code', $discountCode)->first();
-        $discounttrueAmount = $discount->amount;
-        if ($discount) {
-            // Hitung total harga setelah diskon
-            if ($discount->amount <= 100){
-                $discountAmount = $service->price_1*$discount->amount/100;
-                $discountWarn = "Your Discount is ".$discount->amount."%";
-            }
-            else{
-                $discountAmount = $discount->amount;
-                $discountWarn = "Your Discount is Rp.".$discount->amount;
-            }
-            $totalPrice = $service->price_1+$service->installer_fee+$service->affiliator_fee+$service->other_fee - $discountAmount;
-            $discountCodeUsed = $discount->id;
-            // Simpan diskon dalam session untuk ditampilkan pada halaman
-            session()->flash('discount_amount', $discountAmount);
-            session()->flash('discount_true_amount', $discounttrueAmount);
-            session()->flash('total_price', $totalPrice);
-            session()->flash('discountcodeused', $discountCodeUsed);
-            session()->flash('discountwarn', $discountWarn);
-            //var_dump($affiliateCode); die;
-            // Kembalikan ke halaman invoice dengan diskon diterapkan
-            $link = route('invoice.show', ['id' => $service->id]).'?aff='.$affiliateCode;
-            //var_dump($link); die;
-            return redirect($link);
+
+        // Jika diskon tidak ditemukan
+        if (!$discount) {
+            $link = route('invoice.show', ['id' => $service->id]) . '?aff=' . $affiliateCode;
+            return redirect($link)->withErrors(['discount_code' => 'Kode diskon tidak valid!']);
         }
 
-        // Jika kode diskon tidak valid
-        $link = route('invoice.show', ['id' => $service->id]).'?aff='.$affiliateCode;
-        return redirect($link)->withErrors(['discount_code' => 'Kode diskon tidak valid!']);
+        // Periksa apakah diskon dapat digunakan pada service ini
+        $serviceIds = json_decode($discount->service_ids, true); // Decode JSON service_ids menjadi array
+        if (!in_array($service->id, $serviceIds)) {
+            $link = route('invoice.show', ['id' => $service->id]) . '?aff=' . $affiliateCode;
+            return redirect($link)->withErrors(['discount_code' => 'Kode diskon tidak berlaku untuk layanan ini!']);
+        }
+
+        // Hitung jumlah diskon
+        $discountTrueAmount = $discount->amount;
+
+        if ($discount->amount <= 100) {
+            // Jika diskon dalam bentuk persentase
+            $discountAmount = $service->price_1 * $discount->amount / 100;
+            $discountWarn = "Your Discount is " . $discount->amount . "%";
+        } else {
+            // Jika diskon dalam bentuk nominal
+            $discountAmount = $discount->amount;
+            $discountWarn = "Your Discount is Rp." . number_format($discount->amount, 2);
+        }
+
+        // Hitung total harga setelah diskon
+        $totalPrice = $service->price_1 + $service->installer_fee + $service->affiliator_fee + $service->other_fee - $discountAmount;
+        $discountCodeUsed = $discount->code;
+
+        // Simpan diskon dalam session untuk ditampilkan di halaman
+        session()->flash('discount_amount', $discountAmount);
+        session()->flash('discount_true_amount', $discountTrueAmount);
+        session()->flash('total_price', $totalPrice);
+        session()->flash('discountcodeused', $discountCodeUsed);
+        session()->flash('discountwarn', $discountWarn);
+
+        // Redirect ke halaman invoice dengan diskon diterapkan
+        $link = route('invoice.show', ['id' => $service->id]) . '?aff=' . $affiliateCode;
+        return redirect($link);
     }
+
 
     public function showWithAffiliate($id, $affiliateCode)
     {
