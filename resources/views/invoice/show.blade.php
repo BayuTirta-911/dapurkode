@@ -14,16 +14,8 @@
 
                 <table class="table">
                     <tr>
-                        <td>{{ $service->name }}</td>
-                        <td>Rp {{ number_format($service->price_1) }}</td>
-                    </tr>
-                    <tr>
-                        <td>Installer Fee</td>
-                        <td>Rp {{ number_format($service->installer_fee) }}</td>
-                    </tr>
-                    <tr>
-                        <td>Other Fee</td>
-                        <td>Rp {{ number_format($service->other_fee) }}</td>
+                        <td>Service : {{ $service->name }}</td>
+                        <td>Rp {{ number_format($og_price) }}</td>
                     </tr>
 
                     <!-- Diskon -->
@@ -37,7 +29,7 @@
                     <tr>
                         <th>Total</th>
                         <th>
-                            Rp {{ number_format(session('total_price', $service->price_1 + $service->installer_fee + $service->other_fee)) }}
+                            Rp {{ number_format($og_price - session('discount_amount')); }}
                         </th>
                     </tr>
                 </table>
@@ -62,7 +54,9 @@
                     @csrf
                     <h5>Informasi Pemesanan</h5>
                     <input type="hidden" name="affiliate_code" value="{{ old('affiliate_code', $affiliateCode) }}">
-                    <input type="hidden" name="summary" value="{{ number_format(session('total_price', $service->price_1 + $service->installer_fee + $service->other_fee)) }}">
+                    <input type="hidden" name="summary" value="{{ number_format($og_price - session('discount_amount')) }}">
+                    <input type="hidden" name="og_price" value="{{ number_format($og_price) }}">
+                    <input type="hidden" name="og_disc" value="{{ number_format(session('discount_true_amount')) }}">
                     <div class="mb-3">
                         <label>Alamat</label>
                         <textarea name="address" class="form-control" required></textarea>
