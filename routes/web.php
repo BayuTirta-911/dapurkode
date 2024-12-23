@@ -51,6 +51,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/projects', [App\Http\Controllers\AdminProjectController::class, 'index'])->name('admin.projects.index');
     Route::get('/admin/projects/{invoice}', [App\Http\Controllers\AdminProjectController::class, 'show'])->name('admin.projects.show');
     Route::post('/admin/projects/{invoice}/finish', [App\Http\Controllers\AdminProjectController::class, 'finish'])->name('admin.projects.finish');
+// Manage Highlited Services
+    Route::get('/admin/services/highlight', [App\Http\Controllers\AdminController::class, 'manageHighlight'])->name('admin.services.highlight');
+    Route::post('/admin/services/highlight', [App\Http\Controllers\AdminController::class, 'updateHighlight'])->name('admin.services.update_highlight');
 });
 // Stop Any Banned User
 Route::middleware(['auth', 'check.status'])->group(function () {
@@ -136,6 +139,9 @@ Route::middleware(['auth', 'role:vendor'])->group(function () {
 Route::get('/signup', [App\Http\Controllers\UserController::class, 'signupForm'])->name('signup');
 Route::post('/signup', [App\Http\Controllers\UserController::class, 'signup'])->name('signup.post');
 
+Route::get('/', [App\Http\Controllers\VisitorPageController::class, 'home'])->name('visitor.home');
+Route::get('/services', [App\Http\Controllers\VisitorPageController::class, 'services'])->name('visitor.services');
+Route::get('/about', [App\Http\Controllers\VisitorPageController::class, 'about'])->name('visitor.about');
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
