@@ -192,4 +192,40 @@ class AdminController extends Controller
         // Redirect kembali ke daftar diskon dengan pesan sukses
         return redirect()->route('admin.discounts.index')->with('success', 'Discount deleted successfully.');
     }
+
+    public function manageHighlight(Request $request)
+    {
+        $query = $request->input('search'); // Ambil input pencarian
+    
+        // Ambil layanan yang berstatus approved dan sesuai pencarian (jika ada)
+        $approvedServices = Service::where('status', 'approved')
+            ->when($query, function ($q) use ($query) {
+                return $q->where('name', 'like', '%' . $query . '%');
+            })
+            ->paginate(100); // Batasi 10 layanan per halaman
+    
+        // Ambil layanan yang saat ini berstatus highlight
+        $highlightedServices = Service::where('highlight', true)->get();
+    
+        return view('admin.services.highlight', compact('approvedServices', 'highlightedServices', 'query'));
+    }
+
+public function updateHighlight(Request $request)
+    {
+        $request->validate([
+            'service_ids' => 'required|array|max:5', // Maksimal 5 layanan
+            'service_ids.*' => 'exists:services,id', // Validasi ID layanan
+        ]);
+
+        // Set semua layanan ke tidak highlight
+        Service::where('highlight', true)->update(['highlight' => false]);
+
+        // Update layanan yang dipilih menjadi highlight
+        Service::whereIn('id', $request->service_ids)->update(['highlight' => true]);
+
+        return redirect()->route('admin.services.highlight')
+            ->with('success', 'Highlighted services updated successfully.');
+    }
+    
+
 }

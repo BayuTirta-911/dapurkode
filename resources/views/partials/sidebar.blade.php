@@ -86,6 +86,16 @@
             @endif
 
             @if (auth()->check() && auth()->user()->role === 'admin')
+            <!-- Link Vendor's Services -->
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{ route('admin.services.highlight') }}" aria-expanded="false">
+                <iconify-icon icon="line-md:star-filled" width="24" height="24"></iconify-icon>
+                    <span class="hide-menu">Highlighted Service</span>
+                </a>
+            </li>
+            @endif
+
+            @if (auth()->check() && auth()->user()->role === 'admin')
             <!-- Link Discounts -->
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('admin.discounts.index') }}" aria-expanded="false">
