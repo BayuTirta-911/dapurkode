@@ -41,7 +41,7 @@
                     <img src="{{ asset('storage/' . $service->image) }}" class="card-img-top" alt="{{ $service->name }}" style="height: 200px; object-fit: cover;">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ $service->name }}</h5>
-                        <p class="card-text text-muted mb-3">{{ Str::limit($service->description, 60, '...') }}</p>
+                        <p class="card-text text-muted mb-3">{{ Str::limit(strip_tags($service->description), 60, '...') }}</p>
                         <p class="card-text text-muted mb-3">Rp {{ number_format($service->price_1+$service->installer_fee+$service->affiliator_fee+$service->other_fee, 2) }}</p>
                         <a href="{{ route('visitor.service-detail', $service->id) }}" class="btn btn-primary mt-auto">Learn More</a>
                     </div>
