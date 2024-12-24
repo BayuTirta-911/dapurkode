@@ -54,7 +54,7 @@
                             <h3>{{ $service->name }}</h3>
                             <p>{{ Str::limit($service->description, 150) }}</p>
                             <p class="text-muted">Price: Rp {{ number_format($service->price_1+$service->installer_fee+$service->affiliator_fee+$service->other_fee, 2) }}</p>
-                            <a href="{{ route('visitor.services') }}" class="btn btn-info">Learn More</a>
+                            <a href="{{ route('visitor.service-detail', $service->id) }}" class="btn btn-info">Learn More</a>
                         </div>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ $service->name }}</h5>
                                 <p class="card-text text-muted">Rp {{ number_format($service->price_1+$service->installer_fee+$service->affiliator_fee+$service->other_fee, 2) }}</p>
-                                <a href="{{ route('visitor.services') }}" class="btn btn-primary btn-sm">Learn More</a>
+                                <a href="{{ route('visitor.service-detail', $service->id) }}" class="btn btn-primary btn-sm">Learn More</a>
                             </div>
                         </div>
                     </div>

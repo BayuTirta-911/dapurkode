@@ -43,7 +43,7 @@
                         <h5 class="card-title">{{ $service->name }}</h5>
                         <p class="card-text text-muted mb-3">{{ Str::limit($service->description, 60, '...') }}</p>
                         <p class="card-text text-muted mb-3">Rp {{ number_format($service->price_1+$service->installer_fee+$service->affiliator_fee+$service->other_fee, 2) }}</p>
-                        <a href="#" class="btn btn-primary mt-auto">Learn More</a>
+                        <a href="{{ route('visitor.service-detail', $service->id) }}" class="btn btn-primary mt-auto">Learn More</a>
                     </div>
                 </div>
             </div>

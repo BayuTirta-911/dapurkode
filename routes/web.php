@@ -142,6 +142,7 @@ Route::post('/signup', [App\Http\Controllers\UserController::class, 'signup'])->
 Route::get('/', [App\Http\Controllers\VisitorPageController::class, 'home'])->name('visitor.home');
 Route::get('/services', [App\Http\Controllers\VisitorPageController::class, 'services'])->name('visitor.services');
 Route::get('/about', [App\Http\Controllers\VisitorPageController::class, 'about'])->name('visitor.about');
+Route::get('/service/{id}', [App\Http\Controllers\VisitorPageController::class, 'showService'])->name('visitor.service-detail');
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
