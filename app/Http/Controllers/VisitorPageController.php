@@ -42,4 +42,23 @@ class VisitorPageController extends Controller
     {
         return view('visitor.about');
     }
+
+    // Halaman Services Individual
+    public function showService($id)
+    {
+        $service = Service::findOrFail($id);
+        if ($service->group_id) {
+            $relatedServices = Service::where('group_id', $service->group_id)
+                ->where('id', '!=', $service->id)
+                ->get(); // Mengambil service lain dalam grup yang sama
+        } else {
+            // Jika tidak ada grup, ambil service yang di-highlight
+            $relatedServices = Service::where('highlight', true)
+                ->where('id', '!=', $service->id)
+                ->limit(5)
+                ->get();
+        }
+        return view('visitor.service-detail', compact('service', 'relatedServices'));
+    }
+
 }
