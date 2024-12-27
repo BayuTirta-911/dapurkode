@@ -41,6 +41,18 @@
     <script src="{{ asset('assets/js/dashboard.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
     <script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        // Sinkronkan TinyMCE ke dalam textarea
+        tinymce.triggerSave();
+
+        // Debug isi textarea
+        const description = document.querySelector('textarea[name="description"]').value;
+        if (!description) {
+            e.preventDefault();
+            alert('Description cannot be empty!');
+        }
+    });
+
     tinymce.init({
         selector: 'textarea',
         plugins: [

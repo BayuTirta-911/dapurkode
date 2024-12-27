@@ -23,7 +23,7 @@
                 <!-- Input untuk Deskripsi -->
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
-                    <textarea name="description" id="usetinymce" class="form-control" rows="4" required>{{ old('description') }}</textarea>
+                    <textarea name="description" id="usetinymce" class="form-control" rows="4">{{ old('description') }}</textarea>
                 </div>
 
                 <!-- Input untuk Price 1 -->
