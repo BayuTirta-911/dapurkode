@@ -46,15 +46,18 @@ class VisitorPageController extends Controller
     // Halaman Services Individual
     public function showService($id)
     {
-        $service = Service::findOrFail($id);
+        $service = Service::findOrFail($id); 
+        // Cek apakah service memiliki grup
         if ($service->group_id) {
             $relatedServices = Service::where('group_id', $service->group_id)
                 ->where('id', '!=', $service->id)
+                ->where('status', 'approved') // Menambahkan filter status approved
                 ->get(); // Mengambil service lain dalam grup yang sama
         } else {
             // Jika tidak ada grup, ambil service yang di-highlight
             $relatedServices = Service::where('highlight', true)
                 ->where('id', '!=', $service->id)
+                ->where('status', 'approved') // Menambahkan filter status approved
                 ->limit(5)
                 ->get();
         }
