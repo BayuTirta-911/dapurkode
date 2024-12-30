@@ -1,9 +1,13 @@
 <?php
 namespace App\Http\Controllers;
 use App\Models\Service;
+use App\Models\User;
 use App\Models\ServiceGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\NewServiceNotification;
+use App\Mail\ModifiedServiceNotification;
+use Illuminate\Support\Facades\Mail;
 
 class ServiceController extends Controller
 {
@@ -28,7 +32,7 @@ class ServiceController extends Controller
 
     // Menyimpan data service baru
     public function store(Request $request)
-    {
+    { 
         if ($request->hasFile('image') && $request->file('image')->getSize() > 2 * 1024 * 1024) {
             return redirect()->back()->with('error', 'The uploaded file is too large. Maximum size is 2 MB.');
         }
@@ -58,7 +62,13 @@ class ServiceController extends Controller
             'status' => 'pending', // Status default adalah 'pending'
             'image' => $imagePath,
         ]);
-
+        // Mengambil email dari user dengan role admin
+        $adminEmail = User::where('role', 'admin')->pluck('email')->toArray();
+        // Kirim email ke semua admin yang ditemukan
+        $service=$request;
+        foreach ($adminEmail as $email) {
+            Mail::to($email)->send(new NewServiceNotification($service));
+        }
         return redirect()->route('vendor.services.index')->with('success', 'Service created successfully.');
     }
 
@@ -122,6 +132,13 @@ class ServiceController extends Controller
             'price_3' => $request->price_3,
             'status' => 'pending',
         ]);
+
+        $adminEmail = User::where('role', 'admin')->pluck('email')->toArray();
+        // Kirim email ke semua admin yang ditemukan
+        $service=$request;
+        foreach ($adminEmail as $email) {
+            Mail::to($email)->send(new ModifiedServiceNotification($service));
+        }
 
         return redirect()->route('vendor.services.index')->with('success', 'Service updated successfully.');
     }
