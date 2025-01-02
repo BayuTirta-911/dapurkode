@@ -54,7 +54,7 @@
     });
 
     tinymce.init({
-        selector: 'textarea',
+        selector: 'textarea#usetinymce',
         plugins: [
         // Core editing features
         'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
