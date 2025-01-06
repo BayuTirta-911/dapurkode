@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AffiliateRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\AffiliateRequestNotification;
+use Illuminate\Support\Facades\Mail;
 
 class AffiliateRequestController extends Controller
 {
@@ -27,7 +30,12 @@ class AffiliateRequestController extends Controller
             'self_description' => $request->self_description,
             'marketing_plan' => $request->marketing_plan,
         ]);
-
+        // Kirim notifikasi email ke admin
+        $affiliateRequest = $request;
+        $adminEmails = User::where('role', 'admin')->pluck('email');
+        foreach ($adminEmails as $email) {
+            Mail::to($email)->send(new \App\Mail\AffiliateRequestNotification($affiliateRequest));
+        }
         return redirect()->route('affiliate.request.create')->with('success', 'Your request has been submitted.');
     }
 
