@@ -14,14 +14,14 @@
 
                 <table class="table">
                     <tr>
-                        <td>Service : {{ $service->name }}</td>
+                        <td>Layanan : {{ $service->name }}</td>
                         <td>Rp {{ number_format($og_price) }}</td>
                     </tr>
 
                     <!-- Diskon -->
                     @if(session('discount_amount'))
                     <tr>
-                        <td>Discount</td>
+                        <td>Diskon</td>
                         <td>- Rp {{ number_format(session('discount_amount')) }}</td>
                     </tr>
                     @endif
@@ -35,14 +35,14 @@
                 </table>
 
                 <!-- Diskon -->
-                <h5>Code Diskon (Optional)</h5>
+                <h5>Kode Diskon (Optional)</h5>
                 <div class="input-group mb-3">
                     <input type="text" name="discount_code" class="form-control" placeholder="Masukkan kode diskon" value="{{ old('discount_code') }}">
                     <button type="submit" class="btn btn-primary">Input Discount</button>
                 </div>
 
                 <!-- Affiliate Code -->
-                <h5>Code Affiliate</h5>
+                <h5>Kode Affiliate</h5>
                 <div class="input-group mb-3">
                     <input type="text" name="affiliate_code" class="form-control" placeholder="No Affiliate Code" value="{{ old('affiliate_code', $affiliateCode) }}" disabled>
                 </div>
@@ -57,14 +57,14 @@
                     <input type="hidden" name="summary" value="{{ number_format($og_price - session('discount_amount')) }}">
                     <input type="hidden" name="og_price" value="{{ number_format($og_price) }}">
                     <input type="hidden" name="og_disc" value="{{ number_format(session('discount_true_amount')) }}">
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label>Alamat</label>
                         <textarea name="address" class="form-control" required></textarea>
                     </div>
                     <div class="mb-3">
                         <label>No. Telepon Cadangan</label>
                         <input type="text" name="phone" class="form-control" required>
-                    </div>
+                    </div> -->
                     <div class="mb-3">
                         <label>Catatan</label>
                         <textarea name="note" class="form-control"></textarea>
@@ -86,8 +86,13 @@
                             @endforeach
                         </div>
                     </div>
-
-                    <button type="submit" class="btn btn-success w-100 mt-4">Proses</button>
+                    @if (auth()->check() && auth()->user()->role === 'user')
+                        <button type="submit" class="btn btn-success w-100 mt-4">Proses</button>
+                    @else
+                        <button type="button" class="btn btn-alert w-100 mt-4" disabled>
+                            Level User Terlalu tinggi, Layanan tidak bisa dipesan.
+                        </button>
+                    @endif
                 </form>
             @else
                 <!-- Jika User Belum Login -->
